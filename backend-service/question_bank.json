@@ -1,0 +1,96 @@
+{
+    "questionBank": [
+        {
+            "question": "What is the value of pi (π)?",
+            "major": "math"
+        },
+        {
+            "question": "Solve the equation x^2 + 5x + 6 = 0.",
+            "major": "math"
+        },
+        {
+            "question": "What is the Pythagorean theorem?",
+            "major": "math"
+        },
+        {
+            "question": "What is the derivative of x^2?",
+            "major": "math"
+        },
+        {
+            "question": "What is the probability of rolling a 6 on a fair six-sided die?",
+            "major": "math"
+        },
+        {
+            "question": "Simplify the expression (2x + 5) * (3x - 2).",
+            "major": "math"
+        },
+        {
+            "question": "What is the area of a circle with radius 2?",
+            "major": "math"
+        },
+        {
+            "question": "What is the slope-intercept form of a linear equation?",
+            "major": "math"
+        },
+        {
+            "question": "Solve the inequality 2x - 5 < 10.",
+            "major": "math"
+        },
+        {
+            "question": "What is the factorial of 5?",
+            "major": "math"
+        },
+        {
+            "question": "What is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the basic unit of life?",
+            "major": "Biology"
+        },
+        {
+            "question": "What are the two main types of cells?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the study of heredity and variation in living organisms?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the largest organ in the human body?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the scientific name for the study of insects?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the process by which cells break down glucose to release energy?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the process by which organisms maintain a stable internal environment?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the study of the interactions between organisms and their environment?",
+            "major": "Biology"
+        },
+        {
+            "question": "What is the process by which an organism develops from a single cell to a full-grown individual?",
+            "major": "Biology"
+        },
+        {
+            "question": "Apakah Anda tertarik dengan bidang energi terbarukan?",
+            "major": "Teknik Energi"
+        },
+        {
+            "question": "Apakah Anda ingin belajar lebih banyak tentang meteorologi?",
+            "major": "Meteorologi"
+        },
+        {
+            "question": "Apakah Anda ingin belajar mengenai pengelolaan sumber daya alam dan lingkungan?",
+            "major": "Teknik Lingkungan"
+        }
+    ]
+}
