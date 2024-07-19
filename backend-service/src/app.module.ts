@@ -11,6 +11,9 @@ import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from './shared/service/config.service';
 import { WebsocketModule } from './lib/websocket/websocket.module';
+import { AgentSupervisorModule } from './modules/agent-supervisor/agent-supervisor.module';
+
+import { LanggraphModule } from './modules/langgraph/langgraph.module';
 
 @Module({
   imports: [
@@ -26,6 +29,8 @@ import { WebsocketModule } from './lib/websocket/websocket.module';
     ChainingModule,
     WebsocketModule,
     UserModule,
+    AgentSupervisorModule,
+    LanggraphModule,
   ],
   controllers: [AppController],
   providers: [AppService],
