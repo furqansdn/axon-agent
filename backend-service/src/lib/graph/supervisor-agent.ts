@@ -14,6 +14,7 @@ export interface AgentStateChannels {
   next: string;
 }
 
+export const members = ['chart_generator', 'researcher'];
 // This defines the object that is passed between each node
 // in the graph. We will create different nodes for each agent and tool
 export const agentStateChannels: StateGraphArgs<AgentStateChannels>['channels'] =
@@ -30,8 +31,6 @@ export const agentStateChannels: StateGraphArgs<AgentStateChannels>['channels'] 
   };
 
 export const createAgentSupervisor = async () => {
-  const members = ['chart_generator', 'researcher'];
-
   const systemPrompt =
     'You are a supervisor tasked with managing a conversation between the' +
     ' following workers: {members}. Given the following user request,' +

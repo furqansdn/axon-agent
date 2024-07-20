@@ -1,8 +1,12 @@
+// require('esm-hook');
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { z } from 'zod';
 import { createCanvas } from 'canvas';
-import * as d3 from 'd3';
+
 import * as fs from 'fs';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import * as d3 from 'd3';
 
 const chartTool = new DynamicStructuredTool({
   name: 'generate_chart',

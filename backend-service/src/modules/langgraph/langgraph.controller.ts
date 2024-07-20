@@ -42,4 +42,9 @@ export class LanggraphController {
   async persistentGraph() {
     return this.langgraphService.persistentGraph();
   }
+
+  @Post('agentsupervisor')
+  async agentSupervisor(@Body() body: UserQuery) {
+    return this.langgraphService.agentSupervisor(body.query);
+  }
 }

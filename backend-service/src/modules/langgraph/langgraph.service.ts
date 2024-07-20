@@ -18,6 +18,7 @@ import { ToolNode } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
 
 import { z } from 'zod';
+import { workflow } from 'src/lib/graph';
 
 interface IState {
   input: string;
@@ -410,5 +411,10 @@ export class LanggraphService {
     return await graph.invoke({
       messages: [new HumanMessage('What is the weather today?')],
     });
+  }
+
+  async agentSupervisor(query: string) {
+    const graph = (await workflow()).compile();
+    return await graph.invoke({ input: query });
   }
 }
