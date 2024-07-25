@@ -59,6 +59,7 @@ export class AgentService implements OnModuleInit {
       rendered_tools: renderTextDescription(this.toolkits),
       input: query,
     });
+    console.log(result.intermediateSteps);
 
     return result;
   }

@@ -7,6 +7,8 @@ import {
 } from "@langchain/core/prompts";
 import { profileTool } from "./tools/profile";
 import { ChatOpenAI } from "@langchain/openai";
+import { weatherTool } from "./tools/weather";
+import { formUserTools } from "./tools/form-user";
 
 interface AgentExecutorState {
   input: string;
@@ -46,7 +48,7 @@ Your job is to determine whether or not you have a tool which can handle the use
     ["human", "{input}"],
   ]);
 
-  const tools = [profileTool];
+  const tools = [profileTool, weatherTool, formUserTools];
 
   const llm = new ChatOpenAI({
     temperature: 0,
@@ -97,6 +99,8 @@ const invokeTools = async (
     // [invoiceTool.name]: invoiceTool,
     // [weatherTool.name]: weatherTool,
     // [websiteDataTool.name]: websiteDataTool,
+    [formUserTools.name]: formUserTools,
+    [weatherTool.name]: weatherTool,
     [profileTool.name]: profileTool,
   };
 
@@ -105,7 +109,7 @@ const invokeTools = async (
     throw new Error("No tool found in tool map.");
   }
   const toolResult = await selectedTool.invoke(
-    state.toolCall.parameters,
+    state.toolCall.parameters as any,
     config
   );
   return {
@@ -130,5 +134,6 @@ export function agentExecutor() {
     .addEdge("invokeTools", END);
 
   const graph = workflow.compile();
+
   return graph;
 }

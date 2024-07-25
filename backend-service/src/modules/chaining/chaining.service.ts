@@ -147,4 +147,16 @@ export class ChainingService {
 
     return result;
   }
+
+  public async getQuestionBank() {
+    const filePath = path.join(__dirname + '/../../../', 'question_bank.json');
+
+    if (fs.existsSync(filePath)) {
+      const data = await fs.promises.readFile(filePath, 'utf-8');
+
+      return JSON.parse(data);
+    }
+
+    return { questionBank: [] };
+  }
 }

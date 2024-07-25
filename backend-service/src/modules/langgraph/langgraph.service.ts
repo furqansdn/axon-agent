@@ -414,7 +414,7 @@ export class LanggraphService {
   }
 
   async agentSupervisor(query: string) {
-    const graph = (await workflow()).compile();
-    return await graph.invoke({ input: query });
+    // const graph = (await workflow()).compile();
+    // return await graph.invoke({ input: query });
   }
 }

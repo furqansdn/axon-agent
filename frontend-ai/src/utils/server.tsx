@@ -38,6 +38,7 @@ export function streamRunnableUI<RunInput, RunOutput>(
       string,
       ReturnType<typeof createStreamableUI | typeof createStreamableValue>
     > = {};
+    runnable;
 
     for await (const streamEvent of (
       runnable as Runnable<RunInput, RunOutput>
@@ -54,14 +55,17 @@ export function streamRunnableUI<RunInput, RunOutput>(
       }
 
       const [kind, type] = streamEvent.event.split("_").slice(1);
+
       if (type === "stream" && kind !== "chain") {
         const chunk = streamEvent.data.chunk;
+
         if ("text" in chunk && typeof chunk.text === "string") {
           if (!callbacks[streamEvent.run_id]) {
             // the createStreamableValue / useStreamableValue is preferred
             // as the stream events are updated immediately in the UI
             // rather than being batched by React via createStreamableUI
             const textStream = createStreamableValue();
+
             ui.append(<AIMessage value={textStream.value} />);
             callbacks[streamEvent.run_id] = textStream;
           }

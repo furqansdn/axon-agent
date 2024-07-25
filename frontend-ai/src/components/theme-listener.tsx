@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:8000"); // Replace with your NestJS server URL
+const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`); // Replace with your NestJS server URL
 
 const ThemeListener = ({
   children,

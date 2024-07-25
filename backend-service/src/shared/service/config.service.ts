@@ -24,13 +24,17 @@ export class ConfigService {
     return {
       entities,
       synchronize: true,
-      type: 'sqlite',
+      type: 'mssql',
       name: 'connection1',
+      host: this.getString('DB_HOST'),
+      port: this.getNumber('DB_PORT'),
+      username: this.getString('DB_USERNAME'),
+      password: this.getString('DB_PASSWORD'),
       database: this.getString('DB_NAME'),
+      migrationsRun: false,
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
-      extra: {
-        trustServerCertificate: true,
-      },
+      options: { encrypt: false },
+      // do net enable this using migration instead
     };
   }
 

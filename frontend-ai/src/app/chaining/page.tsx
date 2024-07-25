@@ -1,37 +1,22 @@
 "use client";
 
-import {
-  Book,
-  Bot,
-  Code2,
-  CornerDownLeft,
-  LifeBuoy,
-  Settings2,
-  SquareTerminal,
-  SquareUser,
-  Triangle,
-} from "lucide-react";
+import { CornerDownLeft } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { useState } from "react";
 import axios from "axios";
 
 import { Loader2, Terminal } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TableQuestionBank } from "@/components/prebuild/questionbank";
 
-export const Icons = {
+const Icons = {
   spinner: Loader2,
 };
 
@@ -49,7 +34,7 @@ export default function Dashboard() {
 
     setLoading(true);
     const axiosResponse = await axios.post(
-      "http://localhost:8000/chaining/question-generator",
+      `${process.env.NEXT_PUBLIC_API_URL}/chaining/question-generator`,
       {
         query: message,
       }
@@ -103,12 +88,14 @@ export default function Dashboard() {
 
             <div className="mt-6 justify-center flex-1 border flex">
               {loading && <Icons.spinner className="h-6 w-6 animate-spin" />}
-              {alert && (
+              {alert ? (
                 <Alert>
                   <Terminal className="h-4 w-4" />
                   <AlertTitle>Success</AlertTitle>
                   <AlertDescription>{alert}</AlertDescription>
                 </Alert>
+              ) : (
+                <TableQuestionBank />
               )}
             </div>
           </div>

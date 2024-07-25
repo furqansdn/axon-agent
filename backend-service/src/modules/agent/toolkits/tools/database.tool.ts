@@ -42,7 +42,7 @@ export class DatabaseTools extends StructuredTool {
     const writeQuery = await createSqlQueryChain({
       llm,
       db,
-      dialect: 'sqlite',
+      dialect: 'mssql',
     });
 
     const answerPrompt =
@@ -57,12 +57,15 @@ export class DatabaseTools extends StructuredTool {
 
     const chain = RunnableSequence.from([
       RunnablePassthrough.assign({ query: writeQuery }).assign({
-        result: (i: { query: string }) => executeQuery.invoke(i.query),
+        result: (i: { query: string }) => {
+          return executeQuery.invoke(i.query);
+        },
       }),
       answerChain,
     ]);
 
     const result = await chain.invoke({ question: arg.question });
+
     return result;
   }
 }

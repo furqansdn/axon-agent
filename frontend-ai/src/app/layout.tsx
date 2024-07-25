@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ThemeListener from "@/components/theme-listener";
 import { EndpointsContext } from "./agent";
+import MainComponent from "@/components/system/main";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,9 @@ export default function RootLayout({
         >
           <TooltipProvider>
             <ThemeListener>
-              <EndpointsContext>{children}</EndpointsContext>
+              <EndpointsContext>
+                <MainComponent>{children}</MainComponent>
+              </EndpointsContext>
             </ThemeListener>
           </TooltipProvider>
         </ThemeProvider>

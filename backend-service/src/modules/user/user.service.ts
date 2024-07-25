@@ -17,8 +17,12 @@ export class UserService {
     const filePath = path.join(__dirname + '/../../../', 'MOCK_DATA.json');
     const data = JSON.parse(await fs.promises.readFile(filePath, 'utf-8'));
 
-    const users = this.usersRepository.create(data);
-    await this.usersRepository.save(users);
+    // inserting data 100 at a time
+    for (let i = 0; i < data.length; i += 100) {
+      const users = this.usersRepository.create(data.slice(i, i + 100));
+      await this.usersRepository.save(users);
+    }
+
     return { message: 'Users inserted successfully' };
   }
 

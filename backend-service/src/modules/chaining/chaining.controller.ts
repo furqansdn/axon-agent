@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get } from '@nestjs/common';
 import { ChainingService } from './chaining.service';
 import { UserQuery } from 'src/common/dto/user-query.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,5 +16,10 @@ export class ChainingController {
   @Post('custom-route-execution')
   async customRouteExecution(@Body() body: UserQuery) {
     return this.chainingService.customRouteExecution(body.query);
+  }
+
+  @Get('get-question-bank')
+  async questionBank() {
+    return this.chainingService.getQuestionBank();
   }
 }
