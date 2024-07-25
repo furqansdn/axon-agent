@@ -16,20 +16,7 @@ import { EndpointsContext } from "@/app/agent";
 import { HumanMessageText } from "./message";
 import { LocalContext } from "@/app/shared";
 import { Input } from "../ui/input";
-
-function convertFileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64String = reader.result as string;
-      resolve(base64String.split(",")[1]);
-    };
-    reader.onerror = (error) => {
-      reject(error);
-    };
-    reader.readAsDataURL(file);
-  });
-}
+import { convertFileToBase64 } from "@/utils/converFiletoBase64";
 
 function FileUploadMessage({ file }: { file: File }) {
   return (

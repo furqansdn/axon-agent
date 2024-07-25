@@ -1,7 +1,7 @@
 "use client";
 
 import { CornerDownLeft, Paperclip } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,11 +21,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Header from "@/components/system/header";
-import { set } from "zod";
+import { Input } from "@/components/ui/input";
+import { convertFileToBase64 } from "@/utils/converFiletoBase64";
+import axios from "axios";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Message {
   role: string;
   content: string;
+}
+
+function FileUploadMessage({ file }: { file: File }) {
+  return (
+    <div className="flex items-center gap-2 ml-auto flex-col w-[300px] p-2">
+      <img src={URL.createObjectURL(file)} />
+      <div className="flex">
+        <Paperclip className="size-4" />
+        <span className="text-muted-foreground">{file.name}</span>
+      </div>
+    </div>
+  );
 }
 
 export default function Dashboard() {
@@ -33,6 +48,20 @@ export default function Dashboard() {
 
   const [role, setRole] = useState("system");
   const [messageInput, setMessageInput] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [input, setInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const triggerFileInput = () => {
+    fileInputRef?.current?.click();
+  };
+  const [loading, setLoading] = useState(false);
+
+  const [listMessages, setListMessages] = useState<
+    {
+      message: string;
+      type: "sender" | "receiver";
+    }[]
+  >([]);
 
   const onChange = (value: string, type: "message" | "role") => {
     if (type === "message") {
@@ -71,6 +100,42 @@ export default function Dashboard() {
       setMessageInput(messages[indexMessages].content);
     }
   }, [role]);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setListMessages((prev) => [...prev, { message: input, type: "sender" }]);
+
+    let base64File: string | undefined = undefined;
+
+    if (selectedFile) {
+      base64File = await convertFileToBase64(selectedFile);
+    }
+
+    let fileExtension = selectedFile?.type.split("/")[1];
+
+    const data = {
+      input: input,
+      file:
+        base64File && fileExtension
+          ? { base64: base64File, extension: fileExtension }
+          : undefined,
+      system: messages,
+    };
+
+    setLoading(true);
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/chaining/simple-prompt`,
+      { ...data }
+    );
+
+    setLoading(false);
+
+    setListMessages((prev) => [
+      ...prev,
+      { message: response.data, type: "receiver" },
+    ]);
+    setInput("");
+  };
 
   return (
     <>
@@ -118,10 +183,37 @@ export default function Dashboard() {
           <Badge variant="outline" className="absolute right-3 top-3">
             Output
           </Badge>
-          <div className="flex-1" />
+          <div className="mt-6 overflow-y-scroll flex-1">
+            <ScrollArea className="flex-1 p-4 h-[480px]">
+              {listMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-2 mt-2 ${
+                    msg.type === "sender" ? "justify-end" : ""
+                  }`}
+                >
+                  <div className="flex flex-col gap-3">
+                    {selectedFile && msg.type === "sender" && (
+                      <FileUploadMessage file={selectedFile} />
+                    )}
+                    <div
+                      className={`p-2 rounded-lg ${
+                        msg.type === "sender"
+                          ? `bg-primary dark:text-black text-white`
+                          : "bg-background"
+                      }`}
+                    >
+                      {msg.message}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </ScrollArea>
+          </div>
           <form
             className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring"
             x-chunk="dashboard-03-chunk-1"
+            onSubmit={onSubmit}
           >
             <Label htmlFor="message" className="sr-only">
               Message
@@ -130,14 +222,44 @@ export default function Dashboard() {
               id="message"
               placeholder="Type your message here..."
               className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
             />
             <div className="flex items-center p-3 pt-0">
+              <Input
+                id="file"
+                type="file"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setSelectedFile(e.target.files[0]);
+                  }
+                }}
+              />
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Paperclip className="size-4" />
-                    <span className="sr-only">Attach file</span>
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        triggerFileInput();
+                      }}
+                    >
+                      <Paperclip className="size-4" />
+                      <span className="sr-only">Attach file</span>
+                    </Button>
+                    {selectedFile && (
+                      <Input
+                        readOnly
+                        placeholder="No file chosen"
+                        value={selectedFile?.name}
+                        className="flex-grow"
+                      />
+                    )}
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent side="top">Attach File</TooltipContent>
               </Tooltip>

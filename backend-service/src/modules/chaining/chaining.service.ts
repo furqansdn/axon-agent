@@ -7,8 +7,10 @@ import {
   StringOutputParser,
 } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { HumanMessage } from '@langchain/core/messages';
 
 import { RunnableSequence } from '@langchain/core/runnables';
+import { SimplePrompt } from './dto/simple-prompt';
 
 @Injectable()
 export class ChainingService {
@@ -158,5 +160,41 @@ export class ChainingService {
     }
 
     return { questionBank: [] };
+  }
+
+  public async simplePrompt(data: SimplePrompt) {
+    const promptTemplate: any = data.system.map((message) => {
+      if (message.role === 'user') {
+        return ['human', message.content];
+      }
+      return [message.role, message.content];
+    });
+
+    const prompt = ChatPromptTemplate.fromMessages([...promptTemplate]);
+
+    const parser = new StringOutputParser();
+
+    const chain = prompt.pipe(this.client).pipe(parser);
+
+    const content: any = [
+      {
+        type: 'text',
+        content: data.input,
+      },
+    ];
+
+    if (data.file) {
+      content.push({
+        type: 'image_url',
+        image_url: {
+          url: `data:image/${data.file.extension};base64,${data.file.base64}`,
+        },
+      });
+    }
+
+    const input = new HumanMessage({
+      content: content,
+    });
+    return chain.invoke(input);
   }
 }

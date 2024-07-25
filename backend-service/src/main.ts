@@ -10,9 +10,13 @@ import {
 import { ConfigService } from './shared/service/config.service';
 import NestLoggerServiceAdapter from './lib/logger/nestlogger-service-adapter';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { urlencoded, json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   const logger = app.get(NestLoggerServiceAdapter);
   app.useLogger(logger);
